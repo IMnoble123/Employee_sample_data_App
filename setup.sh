@@ -12,6 +12,8 @@ flutter packages pub run build_runner build
 echo "flutter packages pub run build_runner build watch"
 flutter packages pub run build_runner watch --delete-conflicting-outputs
 
+echo "flutter build apk "
+flutter build apk --release --split-per-abi
 
 
 
