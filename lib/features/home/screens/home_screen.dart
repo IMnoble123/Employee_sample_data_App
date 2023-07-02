@@ -15,7 +15,6 @@ import '../../employee/entity/employee_data.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-  
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -78,9 +77,10 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SizedBox(height: height * 2.5),
-            Obx(() => controller.employeeList.value.isEmpty
-                ? imageWidget()
-                : addedEmpoyeeList()),
+            ValueListenableBuilder(
+              valueListenable: controller.employeeList,
+              builder: (context, employess, _) => employess.isEmpty ? imageWidget() : addedEmpoyeeList(),
+            ),
             SizedBox(height: height * 20),
           ],
         ),
@@ -105,9 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
           color: ColorName.colorPrimary,
         ),
         SizedBox(height: height * 1.5),
-        employeeList(controller.employeeList.value
-            .where((e) => e.toDate.isEmpty)
-            .toList()),
+        employeeList(controller.employeeList.value.where((e) => e.toDate.isEmpty).toList()),
         BuildText(
           text: 'Previous employes',
           family: FontFamily.robotoMedium,
@@ -115,9 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
           color: ColorName.colorPrimary,
         ),
         SizedBox(height: height * 1.5),
-        employeeList(controller.employeeList.value
-            .where((e) => e.toDate.isNotEmpty)
-            .toList()),
+        employeeList(controller.employeeList.value.where((e) => e.toDate.isNotEmpty).toList()),
       ],
     );
   }
@@ -144,8 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SlidableAction(
               onPressed: (context) {
-
-                Get.to(()=>  AddEmployeeScreen(index: index,model:data));
+                Get.to(() => AddEmployeeScreen(index: index, model: data));
               },
               backgroundColor: ColorName.colorPrimary,
               foregroundColor: Colors.white,

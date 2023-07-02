@@ -1,12 +1,11 @@
 import 'dart:developer';
-
 import 'package:employee_data_app/features/employee/entity/employee_data.dart';
-import 'package:get/get.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-class EmployeeStorageService {
+class EmployeeStorageService extends ChangeNotifier {
   late final Box<EmployeeModel> _employeeBox;
-  Rx<List<EmployeeModel>> employeeList = Rx([]);
+  ValueNotifier<List<EmployeeModel>> employeeList = ValueNotifier([]);
 
   Future<void> openEmployeeDB() async {
     _employeeBox = await Hive.openBox<EmployeeModel>('employee_data');
@@ -29,6 +28,3 @@ class EmployeeStorageService {
     await _employeeBox.deleteAt(index);
   }
 }
-
-// Rx<RxList<EmployeeModel>> employeeList = RxList<EmployeeModel>([]).obs;
-

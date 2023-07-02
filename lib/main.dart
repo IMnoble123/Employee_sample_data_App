@@ -3,7 +3,6 @@ import 'package:employee_data_app/features/home/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
-
 import 'shared/services/storage_services.dart';
 
 Future<void> main() async {
