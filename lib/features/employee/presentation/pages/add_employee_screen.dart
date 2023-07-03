@@ -1,16 +1,13 @@
 import 'package:employee_data_app/features/employee/entity/employee_data.dart';
-import 'package:employee_data_app/features/home/screens/home_screen.dart';
-import 'package:employee_data_app/shared/fonts/font_constant.dart';
+import 'package:employee_data_app/core/shared/fonts/font_constant.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import '../../../gen/assets.gen.dart';
-import '../../../gen/colors.gen.dart';
-import '../../../gen/fonts.gen.dart';
-import '../../../shared/constants/string_constants.dart';
-import '../../../shared/fonts/size_config.dart';
-import '../../../shared/services/storage_services.dart';
-import '../../../shared/text_widgets/build_text.dart';
+import '../../../../core/gen/assets.gen.dart';
+import '../../../../core/gen/colors.gen.dart';
+import '../../../../core/gen/fonts.gen.dart';
+import '../../../../core/shared/constants/string_constants.dart';
+import '../../../../core/shared/fonts/size_config.dart';
+import '../../../../core/shared/text_widgets/build_text.dart';
 
 class AddEmployeeScreen extends StatefulWidget {
   const AddEmployeeScreen({super.key, this.index, this.model});
@@ -27,8 +24,6 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
   TextEditingController roleController = TextEditingController();
   TextEditingController fromDateController = TextEditingController();
   TextEditingController toDateController = TextEditingController();
-
-  final serviceStorage = Get.find<EmployeeStorageService>();
 
   double height = 0.0;
   double width = 0.0;
@@ -106,22 +101,22 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
               SizedBox(height: height * 3),
               InkWell(
                 onTap: () {
-                  Get.bottomSheet(
-                    SizedBox(
-                      height: 150,
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 20),
-                          Center(child: roleListWiget()),
-                        ],
-                      ),
-                    ),
-                    backgroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  );
+                  // Get.bottomSheet(
+                  //   SizedBox(
+                  //     height: 150,
+                  //     child: Column(
+                  //       children: [
+                  //         const SizedBox(height: 20),
+                  //         Center(child: roleListWiget()),
+                  //       ],
+                  //     ),
+                  //   ),
+                  //   backgroundColor: Colors.white,
+                  //   elevation: 0,
+                  //   shape: RoundedRectangleBorder(
+                  //     borderRadius: BorderRadius.circular(10),
+                  //   ),
+                  // );
                 },
                 child: BuildLoginTextFieldBorder(
                   enabled: false,
@@ -263,7 +258,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
             children: [
               InkWell(
                 onTap: () {
-                  Get.back();
+                  Navigator.pop(context);
                 },
                 child: BuildText(
                   text: 'Cancel',
@@ -280,9 +275,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                 child: Container(
                   height: 40,
                   width: 73,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: ColorName.colorPrimary),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: ColorName.colorPrimary),
                   child: Center(
                     child: BuildText(
                       text: 'Save',
@@ -308,18 +301,14 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
     if (_name.isEmpty || _role.isEmpty || _fromDate.isEmpty) {
       return;
     }
-    Get.snackbar('Uploaded', 'Employee details uploaded',
-        snackPosition: SnackPosition.BOTTOM,
-        duration: const Duration(seconds: 2),
-        backgroundColor: ColorName.colorPrimary);
-    final _employee = EmployeeModel(
-        name: _name, role: _role, fromDate: _fromDate, toDate: _toDate);
-    Get.off(() => const HomeScreen());
-    if (widget.index == null) {
-      await serviceStorage.addEmployee(_employee);
-    } else {
-      await serviceStorage.updateEmployee(widget.index!, _employee);
-    }
+    // Get.snackbar('Uploaded', 'Employee details uploaded', snackPosition: SnackPosition.BOTTOM, duration: const Duration(seconds: 2), backgroundColor: ColorName.colorPrimary);
+    // final _employee = EmployeeModel(name: _name, role: _role, fromDate: _fromDate, toDate: _toDate);
+    // Get.off(() => const HomeScreen());
+    // if (widget.index == null) {
+    //   await serviceStorage.addEmployee(_employee);
+    // } else {
+    //   await serviceStorage.updateEmployee(widget.index!, _employee);
+    // }
     fullNameController.clear();
     roleController.clear();
     fromDateController.clear();
@@ -335,7 +324,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
         return InkWell(
           onTap: () {
             roleController.text = roleList[index];
-            Get.back();
+            Navigator.pop(context);
           },
           child: Column(
             children: [

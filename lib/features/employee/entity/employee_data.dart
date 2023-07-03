@@ -14,9 +14,10 @@ class EmployeeModel {
   @HiveField(4)
   final String toDate;
 
-  EmployeeModel(
-      {required this.name,
-      required this.role,
-      required this.fromDate,
-      required this.toDate});
+  EmployeeModel({
+    required this.name,
+    required this.role,
+    required this.fromDate,
+    required this.toDate,
+  });
 }

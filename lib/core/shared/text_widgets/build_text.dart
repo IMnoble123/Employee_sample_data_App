@@ -1,5 +1,5 @@
 
-import 'package:employee_data_app/shared/fonts/font_constant.dart';
+import 'package:employee_data_app/core/shared/fonts/font_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../gen/colors.gen.dart';

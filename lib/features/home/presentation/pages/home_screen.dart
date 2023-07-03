@@ -1,17 +1,16 @@
-import 'package:employee_data_app/features/employee/screens/add_employee_screen.dart';
-import 'package:employee_data_app/gen/assets.gen.dart';
-import 'package:employee_data_app/gen/colors.gen.dart';
-import 'package:employee_data_app/shared/constants/string_constants.dart';
-import 'package:employee_data_app/shared/fonts/font_constant.dart';
-import 'package:employee_data_app/shared/widgets/app_button.dart';
+import 'package:employee_data_app/core/gen/assets.gen.dart';
+import 'package:employee_data_app/core/gen/colors.gen.dart';
+import 'package:employee_data_app/core/shared/constants/string_constants.dart';
+import 'package:employee_data_app/core/shared/fonts/font_constant.dart';
+import 'package:employee_data_app/core/shared/fonts/size_config.dart';
+import 'package:employee_data_app/core/shared/text_widgets/build_text.dart';
+import 'package:employee_data_app/core/shared/widgets/app_button.dart';
+import 'package:employee_data_app/features/employee/entity/employee_data.dart';
+import 'package:employee_data_app/features/employee/presentation/bloc/employee_bloc.dart';
+import 'package:employee_data_app/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:get/get.dart';
-import '../../../gen/fonts.gen.dart';
-import '../../../shared/fonts/size_config.dart';
-import '../../../shared/services/storage_services.dart';
-import '../../../shared/text_widgets/build_text.dart';
-import '../../employee/entity/employee_data.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,8 +20,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final controller = Get.put(EmployeeStorageService());
-
   double height = 0.0;
   double width = 0.0;
 
@@ -40,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
         color: ColorName.colorPrimary,
         icon: const Icon(Icons.add),
         onTap: () {
-          Get.to(() => const AddEmployeeScreen());
+          // Get.to(() => const AddEmployeeScreen());
         },
       ),
     ));
@@ -77,9 +74,10 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SizedBox(height: height * 2.5),
-            ValueListenableBuilder(
-              valueListenable: controller.employeeList,
-              builder: (context, employess, _) => employess.isEmpty ? imageWidget() : addedEmpoyeeList(),
+            BlocBuilder<EmployeeBloc, EmployeeState>(
+              builder: (context, state) {
+                return state.employess.isEmpty ? imageWidget() : addedEmpoyeeList(state.employess);
+              },
             ),
             SizedBox(height: height * 20),
           ],
@@ -94,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget addedEmpoyeeList() {
+  Widget addedEmpoyeeList(List<EmployeeModel> employees) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -105,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
           color: ColorName.colorPrimary,
         ),
         SizedBox(height: height * 1.5),
-        employeeList(controller.employeeList.value.where((e) => e.toDate.isEmpty).toList()),
+        employeeList(employees.where((e) => e.toDate.isEmpty).toList()),
         BuildText(
           text: 'Previous employes',
           family: FontFamily.robotoMedium,
@@ -113,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
           color: ColorName.colorPrimary,
         ),
         SizedBox(height: height * 1.5),
-        employeeList(controller.employeeList.value.where((e) => e.toDate.isNotEmpty).toList()),
+        employeeList(employees.where((e) => e.toDate.isNotEmpty).toList()),
       ],
     );
   }
@@ -131,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
           endActionPane: ActionPane(motion: const ScrollMotion(), children: [
             SlidableAction(
               onPressed: (context) {
-                controller.deleteEmployee(index);
+                // controller.deleteEmployee(index);
               },
               backgroundColor: ColorName.delectColor,
               foregroundColor: Colors.white,
@@ -140,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SlidableAction(
               onPressed: (context) {
-                Get.to(() => AddEmployeeScreen(index: index, model: data));
+                // Get.to(() => AddEmployeeScreen(index: index, model: data));
               },
               backgroundColor: ColorName.colorPrimary,
               foregroundColor: Colors.white,
