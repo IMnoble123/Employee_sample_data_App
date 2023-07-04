@@ -1,6 +1,9 @@
-import 'package:employee_data_app/features/employee/entity/employee_data.dart';
+import 'package:employee_data_app/core/extenstions/context_extenstion.dart';
+import 'package:employee_data_app/features/employee/data/models/employee_model.dart';
 import 'package:employee_data_app/core/shared/fonts/font_constant.dart';
+import 'package:employee_data_app/features/employee/presentation/bloc/employee_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/gen/assets.gen.dart';
 import '../../../../core/gen/colors.gen.dart';
@@ -101,22 +104,23 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
               SizedBox(height: height * 3),
               InkWell(
                 onTap: () {
-                  // Get.bottomSheet(
-                  //   SizedBox(
-                  //     height: 150,
-                  //     child: Column(
-                  //       children: [
-                  //         const SizedBox(height: 20),
-                  //         Center(child: roleListWiget()),
-                  //       ],
-                  //     ),
-                  //   ),
-                  //   backgroundColor: Colors.white,
-                  //   elevation: 0,
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(10),
-                  //   ),
-                  // );
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) => SizedBox(
+                      height: 150,
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 20),
+                          Center(child: roleListWiget()),
+                        ],
+                      ),
+                    ),
+                    backgroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  );
                 },
                 child: BuildLoginTextFieldBorder(
                   enabled: false,
@@ -258,7 +262,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
             children: [
               InkWell(
                 onTap: () {
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 child: BuildText(
                   text: 'Cancel',
@@ -299,20 +303,18 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
     final _fromDate = fromDateController.text.trim();
     final _toDate = toDateController.text.trim();
     if (_name.isEmpty || _role.isEmpty || _fromDate.isEmpty) {
+      context.showSnack('Fill the form ! Brefore submit');
       return;
     }
-    // Get.snackbar('Uploaded', 'Employee details uploaded', snackPosition: SnackPosition.BOTTOM, duration: const Duration(seconds: 2), backgroundColor: ColorName.colorPrimary);
-    // final _employee = EmployeeModel(name: _name, role: _role, fromDate: _fromDate, toDate: _toDate);
-    // Get.off(() => const HomeScreen());
-    // if (widget.index == null) {
-    //   await serviceStorage.addEmployee(_employee);
-    // } else {
-    //   await serviceStorage.updateEmployee(widget.index!, _employee);
-    // }
-    fullNameController.clear();
-    roleController.clear();
-    fromDateController.clear();
-    toDateController.clear();
+    final _employee = EmployeeModel(name: _name, role: _role, fromDate: _fromDate, toDate: _toDate);
+    if (widget.index == null) {
+      context.read<EmployeeBloc>().add(EmployeeEvent.addEmployee(_employee));
+    } else {
+      context.read<EmployeeBloc>().add(EmployeeEvent.updateEmployee(widget.index!, _employee));
+    }
+    _employee.dispose();
+    context.pop();
+    context.showSnack('Employee details uploaded');
   }
 
   Widget roleListWiget() {
@@ -339,5 +341,11 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    [fullNameController, roleController, fromDateController, toDateController].map((e) => e.dispose());
+    super.dispose();
   }
 }

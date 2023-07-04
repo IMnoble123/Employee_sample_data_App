@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 part 'employee_data.g.dart';
 
@@ -20,4 +21,11 @@ class EmployeeModel {
     required this.fromDate,
     required this.toDate,
   });
+
+  @mustCallSuper
+  void dispose() {
+    if (kFlutterMemoryAllocationsEnabled) {
+      MemoryAllocations.instance.dispatchObjectDisposed(object: this);
+    }
+  }
 }
